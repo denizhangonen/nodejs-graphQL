@@ -36,7 +36,7 @@ module.exports = buildSchema(`
     }
     
     type RootQuery {
-        login(email: String!, password: String! ): authData!
+        login(email: String!, password: String! ): AuthData!
     }
 
     schema {
