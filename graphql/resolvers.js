@@ -79,6 +79,13 @@ module.exports = {
     return { token: token, userId: user._id.toString() };
   },
   createPost: async function({ postInput }, req) {
+    //check for authentication
+    if (!req.isAuth) {
+      const error = new Error("Not authenticated!");
+      error.code = 401;
+      throw error;
+    }
+
     //#region data validation
     const errors = [];
 
@@ -104,14 +111,25 @@ module.exports = {
     }
     //#endregion data validation
 
+    //get the user
+    const user = await User.findById(req.userId);
+    if (!user) {
+      const error = new Error("invalid user");
+      error.code = 401;
+      throw error;
+    }
     const post = new Post({
       title: postInput.title,
       content: postInput.content,
-      imageUrl: postInput.imageUrl
+      imageUrl: postInput.imageUrl,
+      creator: user
     });
 
     const createdPost = await post.save();
     //TODO add post to users
+    //Add post to user doc
+    user.posts.push(createdPost);
+    await user.save();
 
     return {
       ...createdPost._doc,
