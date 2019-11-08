@@ -105,9 +105,9 @@ app.use((error, req, res, next) => {
 
 mongoose
   .connect(
-    "mongodb+srv://mongouser:1NmVGb2UoBoorho5@cluster0-8gblk.mongodb.net/messages"
+    `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@cluster0-8gblk.mongodb.net/${process.env.MONGO_DEFAULT_DATABASE}`
   )
   .then(result => {
-    app.listen(8080);
+    app.listen(process.env.PORT || 8080);
   })
   .catch(err => console.log(err));
