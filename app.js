@@ -49,7 +49,7 @@ app.use((req, res, next) => {
   );
   res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
   if (req.method === "OPTIONS") {
-    res.sendStatus(200);
+    return res.sendStatus(200);
   }
   next();
 });
